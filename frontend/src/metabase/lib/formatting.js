@@ -1,5 +1,5 @@
 /* @flow */
-
+import MetabaseSettings from "metabase/lib/settings";
 import d3 from "d3";
 import inflection from "inflection";
 import moment from "moment";
@@ -15,6 +15,9 @@ import { parseTimestamp } from "metabase/lib/time";
 import type { Column, Value } from "metabase/meta/types/Dataset";
 import type { DatetimeUnit } from "metabase/meta/types/Query";
 import type { Moment } from "metabase/meta/types";
+
+// use setting value to configure locale for dates
+moment.locale(MetabaseSettings.get("locale"));
 
 export type FormattingOptions = {
     column?: Column,
@@ -109,8 +112,9 @@ export function formatTimeRangeWithUnit(value: Value, unit: DatetimeUnit, option
 
 function formatWeek(m: Moment, options: FormattingOptions = {}) {
     // force 'en' locale for now since our weeks currently always start on Sundays
-    m = m.locale("en");
-    return formatMajorMinor(m.format("wo"), m.format("gggg"), options);
+//    m = m.locale("en");
+    console.log('yolo', m, options);
+    return formatMajorMinor(m.format("Wo"), m.format("GGGG"), options);
 }
 
 export function formatTimeWithUnit(value: Value, unit: DatetimeUnit, options: FormattingOptions = {}) {
@@ -153,7 +157,7 @@ export function formatTimeWithUnit(value: Value, unit: DatetimeUnit, options: Fo
         case "day-of-month":
             return moment().date(value).format("D");
         case "week-of-year": // 1st
-            return moment().week(value).format("wo");
+            return moment().week(value).format("Wo");
         case "month-of-year": // January
             // $FlowFixMe:
             return moment().month(value - 1).format("MMMM");
