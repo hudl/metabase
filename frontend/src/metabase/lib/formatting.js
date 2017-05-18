@@ -1,3 +1,4 @@
+import MetabaseSettings from "metabase/lib/settings";
 import d3 from "d3";
 import inflection from "inflection";
 import moment from "moment";
@@ -14,6 +15,9 @@ const PRECISION_NUMBER_FORMATTER      = d3.format(".2r");
 const FIXED_NUMBER_FORMATTER          = d3.format(",.f");
 const FIXED_NUMBER_FORMATTER_NO_COMMA = d3.format(".f");
 const DECIMAL_DEGREES_FORMATTER       = d3.format(".08f");
+
+// use setting value to configure locale for dates
+moment.locale(MetabaseSettings.get("locale"));
 
 export function formatNumber(number, options = {}) {
     options = { comma: true, ...options};
@@ -75,9 +79,7 @@ function formatTimeWithUnit(value, unit, options = {}) {
         case "day": // January 1, 2015
             return m.format("MMMM D, YYYY");
         case "week": // 1st - 2015
-            // force 'en' locale for now since our weeks currently always start on Sundays
-            m = m.locale("en");
-            return formatMajorMinor(m.format("wo"), m.format("gggg"), options);
+            return formatMajorMinor(m.format("Wo"), m.format("GGGG"), options);
         case "month": // January 2015
             return options.jsx ?
                 <div><span className="text-bold">{m.format("MMMM")}</span> {m.format("YYYY")}</div> :
@@ -93,7 +95,7 @@ function formatTimeWithUnit(value, unit, options = {}) {
         case "day-of-month":
             return moment().date(value).format("D");
         case "week-of-year": // 1st
-            return moment().week(value).format("wo");
+            return moment().week(value).format("Wo");
         case "month-of-year": // January
             return moment().month(value - 1).format("MMMM");
         case "quarter-of-year": // January

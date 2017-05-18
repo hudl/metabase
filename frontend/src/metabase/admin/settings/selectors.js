@@ -39,6 +39,13 @@ const SECTIONS = [
                 type: "string"
             },
             {
+                key: "locale",
+                display_name: "Locale",
+                type: "string",
+                defaultValue: "en",
+                note: "This uses Sunday as first day of the week. If you would like Monday as first day of week, please use \"en_gb\" (without quotes)."
+            },
+            {
                 key: "report-timezone",
                 display_name: "Report Timezone",
                 type: "select",
